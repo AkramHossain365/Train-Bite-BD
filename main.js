@@ -11,7 +11,7 @@ let userOrderHistory = [];
 // ================= API HELPERS =================
 async function apiPost(endpoint, payload) {
     const url = ${API_BASE}/${endpoint};
-
+ 
     console.log('API Request:', url);
     console.log('Payload:', payload);
 
