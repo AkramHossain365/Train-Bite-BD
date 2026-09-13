@@ -1,6 +1,6 @@
 // ================= API CONFIGURATION =================
 // সব API কল এই base URL দিয়ে হবে। আপনার সার্ভার অনুযায়ী বদলান।
-const API_BASE = 'api';
+const API_BASE = 'https://train-bite-bd.site.je/api';
 
 // ================= GLOBAL STATE =================
 let cart = [];
