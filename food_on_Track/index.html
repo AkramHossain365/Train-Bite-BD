@@ -1,0 +1,532 @@
+﻿<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailBites BD - Train Food Delivery in Bangladesh</title>
+    
+    <!-- Google Fonts (Poppins) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ================= HEADER SECTION ================= -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-train-subway logo-icon"></i>
+                <span class="logo-text">Rail<span class="highlight">Bites BD</span></span>
+            </a>
+
+            <nav class="navbar" id="navbar">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                    <li><a href="#menu" class="nav-link">Food Menu</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <button class="cart-btn" id="open-cart-btn" title="View Cart">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </button>
+
+                <div id="user-status-container">
+                    <button class="btn btn-primary" id="open-auth-btn">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="btn-text">Login / Register</span>
+                    </button>
+                </div>
+
+                <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars" id="hamburger-icon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- ================= HERO SECTION ================= -->
+        <section class="hero" id="home">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <span class="hero-subtitle"><i class="fa-solid fa-utensils"></i> বাংলাদেশ রেলওয়ে ফুড ডেলিভারি</span>
+                    <h1 class="hero-title">ট্রেনের সিটে বসেই পান গরম ও তাজা <span class="highlight">পছন্দের খাবার</span></h1>
+                    <p class="hero-description">ট্রেনের নম্বর, নাম বা স্টেশন দিয়ে সার্চ করুন, সময়সূচি ও রুট দেখুন, তারপর পছন্দের স্টেশনে খাবার অর্ডার করুন।</p>
+                    
+                    <form class="search-box" id="search-form">
+                        <div class="input-group">
+                            <i class="fa-solid fa-train input-icon"></i>
+                            <input type="text" id="train-input" autocomplete="off"
+                                   placeholder="ট্রেনের নম্বর, নাম বা স্টেশন (যেমন: 701, Suborno, Sylhet)" required>
+                        </div>
+                        <button type="submit" class="btn btn-search" id="train-search-btn">
+                            <i class="fa-solid fa-magnifying-glass"></i> Find Train
+                        </button>
+                    </form>
+
+                    <!-- Quick search suggestions -->
+                    <div class="train-quick-chips" id="train-quick-chips">
+                        <span class="chips-label"><i class="fa-solid fa-bolt"></i> জনপ্রিয়:</span>
+                        <span class="chip" data-train-q="701">701</span>
+                        <span class="chip" data-train-q="Suborno Express">Suborno Express</span>
+                        <span class="chip" data-train-q="Parabat Express">Parabat Express</span>
+                        <span class="chip" data-train-q="Sylhet">Sylhet</span>
+                        <span class="chip" data-train-q="Rajshahi">Rajshahi</span>
+                        <span class="chip" data-train-q="Chattogram">Chattogram</span>
+                    </div>
+
+                    <!-- ===== TRAIN RESULT PANEL ===== -->
+                    <div class="train-result-box" id="train-result-box" style="display: none;">
+                        <div class="train-result-head">
+                            <span id="train-result-count"></span>
+                            <button type="button" class="train-result-close" id="train-result-close" title="বন্ধ করুন">&times;</button>
+                        </div>
+                        <div class="train-result-list" id="train-result-list">
+                            <!-- JS থেকে ট্রেনের তথ্য আসবে -->
+                        </div>
+                    </div>
+
+                    <div class="station-selector-box" id="station-selector-box" style="display: none;">
+                        <div class="pnr-success-badge">
+                            <i class="fa-solid fa-circle-check"></i> নির্বাচিত ট্রেন: <span id="display-pnr"></span>
+                        </div>
+                        <p class="select-label" id="station-select-heading">খাবার গ্রহণের জন্য ডেলিভারি স্টেশনটি বেছে নিন:</p>
+                        <div class="station-options" id="station-options">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= HOW IT WORKS SECTION ================= -->
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <div class="section-title">
+                    <h2>সহজ ৪টি <span class="highlight">ধাপে অর্ডার</span></h2>
+                    <p>বাংলাদেশ রেলওয়েতে যাত্রার সময় পছন্দের খাবার পাওয়ার নিয়ম</p>
+                </div>
+
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-icon"><i class="fa-solid fa-ticket"></i></div>
+                        <h3>১. তথ্য দিন</h3>
+                        <p>আপনার টিকেটের PNR, PIN বা ট্রেনের নাম লিখে সার্চ করুন।</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon"><i class="fa-solid fa-location-dot"></i></div>
+                        <h3>২. স্টেশন বাছুন</h3>
+                        <p>ট্রেন যে স্টেশনে পৌঁছাবে সেই অনুযায়ী ডেলিভারি স্টেশন সিলেক্ট করুন।</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon"><i class="fa-solid fa-utensils"></i></div>
+                        <h3>৩. খাবার অর্ডার করুন</h3>
+                        <p>মেনু থেকে পছন্দের খাবার সিলেক্ট করে অর্ডার কনফার্ম করুন।</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon"><i class="fa-solid fa-chair"></i></div>
+                        <h3>৪. সিটে বসে নিন</h3>
+                        <p>নির্ধারিত স্টেশনে ট্রেনের সিটেই গরম খাবার পৌঁছে দেওয়া হবে।</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= FOOD MENU SECTION ================= -->
+        <section class="menu-section" id="menu">
+            <div class="container">
+                <div class="section-title">
+                    <h2>জনপ্রিয় <span class="highlight">খাবারের মেনু</span></h2>
+                    <p>স্বাস্থ্যকর ও মানসম্মত রেস্তোরাঁর খাবার</p>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="category-list">
+                    <button class="cat-btn active" data-category="all">সব খাবার</button>
+                    <button class="cat-btn" data-category="biryani">কাচ্চি ও বিরিয়ানি</button>
+                    <button class="cat-btn" data-category="thali">খিচুড়ি ও থালি</button>
+                    <button class="cat-btn" data-category="snacks">স্ন্যাক্স ও ফাস্টফুড</button>
+                    <button class="cat-btn" data-category="drinks">ড্রিংকস & ডেসার্ট</button>
+                </div>
+
+                <!-- Food Grid -->
+                <div class="food-grid" id="food-grid">
+                    <!-- Item 1 -->
+                    <div class="food-card" data-category="biryani">
+                        <div class="food-img-container">
+                            <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=500&q=80" alt="Special Kacchi Biryani" class="food-img">
+                            <span class="badge non-veg"><i class="fa-solid fa-circle"></i> Non-Veg</span>
+                        </div>
+                        <div class="food-info">
+                            <div class="food-rating"><i class="fa-solid fa-star"></i> 4.9 (320+)</div>
+                            <h3 class="food-title">পুরান ঢাকার খাসির কাচ্চি বিরিয়ানি</h3>
+                            <p class="food-desc">সুগন্ধি বাসমতি চালের কাচ্চি, আলু, খাসির মাংস ও বোরহানি।</p>
+                            <div class="food-bottom">
+                                <span class="food-price">৳280</span>
+                                <button class="btn btn-add" onclick="addToCart(1, 'পুরান ঢাকার খাসির কাচ্চি বিরিয়ানি', 280, 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=500&q=80')">
+                                    <i class="fa-solid fa-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="food-card" data-category="thali">
+                        <div class="food-img-container">
+                            <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=500&q=80" alt="Beef Bhuna Khichuri" class="food-img">
+                            <span class="badge non-veg"><i class="fa-solid fa-circle"></i> Non-Veg</span>
+                        </div>
+                        <div class="food-info">
+                            <div class="food-rating"><i class="fa-solid fa-star"></i> 4.8 (190+)</div>
+                            <h3 class="food-title">স্পেশাল গরুর মাংস ভুনা খিচুড়ি</h3>
+                            <p class="food-desc">দেশি চাল ও মসুর ডালের ভুনা খিচুড়ি সাথে তুলতুলে বিফ ভুনা ও সালাদ।</p>
+                            <div class="food-bottom">
+                                <span class="food-price">৳250</span>
+                                <button class="btn btn-add" onclick="addToCart(2, 'স্পেশাল গরুর মাংস ভুনা খিচুড়ি', 250, 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=500&q=80')">
+                                    <i class="fa-solid fa-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="food-card" data-category="thali">
+                        <div class="food-img-container">
+                            <img src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=500&q=80" alt="Executive Veg Thali" class="food-img">
+                            <span class="badge veg"><i class="fa-solid fa-circle"></i> Veg</span>
+                        </div>
+                        <div class="food-info">
+                            <div class="food-rating"><i class="fa-solid fa-star"></i> 4.6 (85+)</div>
+                            <h3 class="food-title">এক্সিকিউটিভ ভেজ থালি (নিরামিষ)</h3>
+                            <p class="food-desc">সরু ভাত, ঘন ডাল, পনির তরকারি, আলুর দম, মিশ্র সবজি ও মিষ্টি।</p>
+                            <div class="food-bottom">
+                                <span class="food-price">৳180</span>
+                                <button class="btn btn-add" onclick="addToCart(3, 'এক্সিকিউটিভ ভেজ থালি', 180, 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=500&q=80')">
+                                    <i class="fa-solid fa-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="food-card" data-category="snacks">
+                        <div class="food-img-container">
+                            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80" alt="Chicken Burger Combo" class="food-img">
+                            <span class="badge non-veg"><i class="fa-solid fa-circle"></i> Non-Veg</span>
+                        </div>
+                        <div class="food-info">
+                            <div class="food-rating"><i class="fa-solid fa-star"></i> 4.7 (140+)</div>
+                            <h3 class="food-title">ক্রিসপি চিকেন বার্গার ও ফ্রাই কম্বো</h3>
+                            <p class="food-desc">চিকেন পেটি বার্গার, ফ্রেঞ্চ ফ্রাই এবং সাথে কোল্ড ড্রিংকস।</p>
+                            <div class="food-bottom">
+                                <span class="food-price">৳220</span>
+                                <button class="btn btn-add" onclick="addToCart(4, 'ক্রিসপি চিকেন বার্গার কম্বো', 220, 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80')">
+                                    <i class="fa-solid fa-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 5 -->
+                    <div class="food-card" data-category="drinks">
+                        <div class="food-img-container">
+                            <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80" alt="Special Borhani" class="food-img">
+                            <span class="badge veg"><i class="fa-solid fa-circle"></i> Veg</span>
+                        </div>
+                        <div class="food-info">
+                            <div class="food-rating"><i class="fa-solid fa-star"></i> 4.9 (210+)</div>
+                            <h3 class="food-title">ঐতিহ্যবাহী স্বাদের বোরহানি (৫০০ মিলি)</h3>
+                            <p class="food-desc">টকদই, পুদিনা ও রকমারি মসলায় তৈরি রিফ্রেশিং বোরহানি।</p>
+                            <div class="food-bottom">
+                                <span class="food-price">৳70</span>
+                                <button class="btn btn-add" onclick="addToCart(5, 'ঐতিহ্যবাহী বোরহানি (৫০০মিলি)', 70, 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80')">
+                                    <i class="fa-solid fa-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= CONTACT US SECTION ================= -->
+        <section class="contact-section" id="contact">
+            <div class="container">
+                <div class="section-title">
+                    <h2>আমাদের সাথে <span class="highlight">যোগাযোগ করুন</span></h2>
+                    <p>যেকোনো প্রশ্ন, অভিযোগ বা অনুসন্ধানের জন্য বার্তা লিখুন</p>
+                </div>
+
+                <div class="contact-grid">
+                    <!-- Contact Info Cards -->
+                    <div class="contact-info">
+                        <div class="contact-info-card">
+                            <i class="fa-solid fa-phone-volume contact-icon"></i>
+                            <div>
+                                <h4>হটলাইন নম্বর</h4>
+                                <p>+880 1835-397371 (২৪/৭ সেবা)</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-card">
+                            <i class="fa-solid fa-envelope-open-text contact-icon"></i>
+                            <div>
+                                <h4>ইমেইল হেল্পডেস্ক</h4>
+                                <p>support@railbitesbd.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-card">
+                            <i class="fa-solid fa-location-dot contact-icon"></i>
+                            <div>
+                                <h4>প্রধান কার্যালয়</h4>
+                                <p>কমলাপুর রেলওয়ে স্টেশন হাব, ঢাকা-১২১৭</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Interactive Form -->
+                    <div class="contact-form-box">
+                        <form id="contact-form">
+                            <div class="form-group">
+                                <label>আপনার নাম</label>
+                                <input type="text" placeholder="পূর্ণ নাম লিখুন" required>
+                            </div>
+                            <div class="form-group">
+                                <label>ইমেইল / মোবাইল নম্বর</label>
+                                <input type="text" placeholder="যোগাযোগের নম্বর বা ইমেইল" required>
+                            </div>
+                            <div class="form-group">
+                                <label>বিষয় (Subject)</label>
+                                <input type="text" placeholder="যেমন: ডেলিভারি সংক্রান্ত তথ্য" required>
+                            </div>
+                            <div class="form-group">
+                                <label>আপনার বার্তা (Message)</label>
+                                <textarea rows="4" placeholder="আপনার প্রশ্ন বা মতামত সবিস্তারে লিখুন..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full">
+                                <i class="fa-solid fa-paper-plane"></i> বার্তা পাঠান (Send Message)
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ================= FOOTER SECTION ================= -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-col">
+                <a href="#" class="logo footer-logo">
+                    <i class="fa-solid fa-train-subway logo-icon"></i>
+                    <span>Rail<span class="highlight">Bites BD</span></span>
+                </a>
+                <p>বাংলাদেশ রেলওয়ের বিভিন্ন প্রধান স্টেশনে আপনার ট্রেনের সিটে মানসম্মত ও সুস্বাদু খাবার ডেলিভারি সেবা।</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#menu">Food Menu</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <p><i class="fa-solid fa-phone"></i> +880 1700-000000</p>
+                <p><i class="fa-solid fa-envelope"></i> support@railbitesbd.com</p>
+                <p><i class="fa-solid fa-location-dot"></i> Kamalapur Railway Station Hub, Dhaka</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 RailBites BD. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ================= LOGIN / REGISTER MODAL ================= -->
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal-card">
+            <button class="modal-close" id="close-auth-modal">&times;</button>
+
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tab-login-btn">লগইন (Login)</button>
+                <button class="auth-tab-btn" id="tab-register-btn">রেজিস্ট্রেশন (Register)</button>
+            </div>
+
+            <!-- Login Form -->
+            <form class="auth-form active" id="login-form">
+                <h3>স্বাগতম! লগইন করুন</h3>
+                <div class="form-group">
+                    <label>মোবাইল নম্বর / ইমেইল</label>
+                    <input type="text" id="login-phone" placeholder="01XXXXXXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label>পাসওয়ার্ড</label>
+                    <input type="password" id="login-pass" placeholder="পাসওয়ার্ড লিখুন" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+            </form>
+
+            <!-- Register Form -->
+            <form class="auth-form" id="register-form">
+                <h3>নতুন অ্যাকাউন্ট খুলুন</h3>
+                <div class="form-group">
+                    <label>আপনার নাম</label>
+                    <input type="text" id="reg-name" placeholder="পূর্ণ নাম লিখুন" required>
+                </div>
+                <div class="form-group">
+                    <label>১১ ডিজিটের মোবাইল নম্বর</label>
+                    <input type="tel" id="reg-phone" placeholder="01XXXXXXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label>ইমেইল (ঐচ্ছিক)</label>
+                    <input type="email" id="reg-email" placeholder="name@example.com">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>লিঙ্গ</label>
+                        <select id="reg-gender">
+                            <option value="">নির্বাচন করুন</option>
+                            <option value="male">পুরুষ</option>
+                            <option value="female">মহিলা</option>
+                            <option value="other">অন্যান্য</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>বয়স</label>
+                        <input type="number" id="reg-age" min="10" max="110" placeholder="যেমন: 28">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>জাতীয় আইডি (NID) — ঐচ্ছিক</label>
+                    <input type="text" id="reg-nid" placeholder="১০–১৭ ডিজিটের NID নম্বর">
+                </div>
+                <div class="form-group">
+                    <label>ঠিকানা</label>
+                    <input type="text" id="reg-address" placeholder="গ্রাম/শহর, উপজেলা, জেলা">
+                </div>
+                <div class="form-group">
+                    <label>নিয়মিত ডেলিভারি স্টেশন</label>
+                    <select id="reg-station">
+                        <option value="Biman Bandar (Airport) Station">Biman Bandar (Airport) Station</option>
+                        <option value="Joydebpur Junction (Gazipur)">Joydebpur Junction (Gazipur)</option>
+                        <option value="Chattogram Railway Station">Chattogram Railway Station</option>
+                        <option value="Sylhet Railway Station">Sylhet Railway Station</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>নতুন পাসওয়ার্ড</label>
+                    <input type="password" id="reg-pass" minlength="6" placeholder="পাসওয়ার্ড তৈরি করুন" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= USER PROFILE MODAL ================= -->
+    <div class="modal-overlay" id="profile-modal">
+        <div class="modal-card" style="max-width: 480px;">
+            <button class="modal-close" id="close-profile-modal">&times;</button>
+            
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h3 id="profile-name">প্যাসেঞ্জার প্রোফাইল</h3>
+                <p id="profile-phone">+880 1XXXXXXXXX</p>
+            </div>
+
+            <div class="profile-body">
+                <h4><i class="fa-solid fa-id-card"></i> আপনার তথ্য (Profile Details)</h4>
+                <div class="profile-details" id="profile-details">
+                    <!-- JS থেকে প্যাসেঞ্জারের তথ্য আসবে -->
+                </div>
+            </div>
+
+            <div class="profile-body">
+                <h4><i class="fa-solid fa-clock-rotate-left"></i> আপনার অর্ডারের ইতিহাস (Order History)</h4>
+                <div class="order-history-list" id="order-history-list">
+                    <!-- JS থেকে ডাইনামিক অর্ডার হিস্ট্রি আসবে -->
+                </div>
+            </div>
+
+            <div class="profile-footer">
+                <button class="btn btn-primary btn-full" id="logout-btn" style="background-color: #ff4757;">
+                    <i class="fa-solid fa-right-from-bracket"></i> লগআউট করুন (Logout)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= CART DRAWER (SIDEBAR) ================= -->
+    <div class="cart-drawer-overlay" id="cart-drawer">
+        <div class="cart-drawer">
+            <div class="cart-header">
+                <h3>আপনার খাবার অর্ডার লিস্ট</h3>
+                <button class="cart-close" id="close-cart-btn">&times;</button>
+            </div>
+
+            <div class="cart-body" id="cart-items-container">
+                <p class="empty-cart-text">আপনার কার্ট খালি। মেনু থেকে খাবার যোগ করুন!</p>
+            </div>
+
+            <div class="cart-footer">
+                <div class="cart-summary">
+                    <span>মোট বিল:</span>
+                    <span id="cart-total-price">৳0</span>
+                </div>
+                <button class="btn btn-primary btn-full" id="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= CHECKOUT / SEAT DETAILS MODAL ================= -->
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="modal-card">
+            <button class="modal-close" id="close-checkout-modal">&times;</button>
+            <h3>ট্রেনের সিট ও ডেলিভারি তথ্য</h3>
+            <form id="checkout-form">
+                <div class="form-group">
+                    <label>সিলেক্ট করা ডেলিভারি স্টেশন</label>
+                    <input type="text" id="checkout-station-display" readonly style="background: #f1f5f9; font-weight: 600; color: #ff4757;">
+                </div>
+                <div class="form-group">
+                    <label>PNR / Ticket PIN / Mobile No.</label>
+                    <input type="text" id="checkout-pnr" required placeholder="বুকিং নম্বর লিখুন">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>বগি / Coach</label>
+                        <input type="text" placeholder="যেমন: 'ক' / 'S_CHAIR'" required>
+                    </div>
+                    <div class="form-group">
+                        <label>সিট নম্বর</label>
+                        <input type="text" placeholder="যেমন: 45" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>পেমেন্ট পদ্ধতি</label>
+                    <select required>
+                        <option value="cod">ক্যাশ অন ডেলিভারি (Cash on Delivery)</option>
+                        <option value="bkash">বিকাশ / নগদ (bKash/Nagad Online)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">অর্ডার কনফার্ম করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>
