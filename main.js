@@ -9,9 +9,10 @@ let selectedDeliveryStation = "";   // ট্রেন সিলেক্ট ক
 let userOrderHistory = [];
 
 // ================= API HELPERS =================
+// ================= API HELPERS =================
 async function apiPost(endpoint, payload) {
-    const url = ${API_BASE}/${endpoint};
- 
+    const url = `${API_BASE}/${endpoint}`;
+
     console.log('API Request:', url);
     console.log('Payload:', payload);
 
@@ -22,6 +23,54 @@ async function apiPost(endpoint, payload) {
         },
         body: JSON.stringify(payload)
     });
+
+    console.log('API Status:', res.status);
+    console.log('API Content-Type:', res.headers.get('content-type'));
+
+    const text = await res.text();
+
+    console.log('API Raw Response:', text);
+
+    if (!res.ok) {
+        throw new Error(
+            `HTTP ${res.status}: ${text}`
+        );
+    }
+
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        throw new Error(
+            `Invalid JSON response: ${text}`
+        );
+    }
+}
+
+async function apiGet(endpoint, params = {}) {
+    const query = new URLSearchParams(params).toString();
+
+    const res = await fetch(
+        `${API_BASE}/${endpoint}${query ? '?' + query : ''}`
+    );
+
+    const text = await res.text();
+
+    console.log('GET API Response:', text);
+
+    if (!res.ok) {
+        throw new Error(
+            `HTTP ${res.status}: ${text}`
+        );
+    }
+
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        throw new Error(
+            `Invalid JSON response: ${text}`
+        );
+    }
+}
 
     console.log('API Status:', res.status);
     console.log('API Content-Type:', res.headers.get('content-type'));
