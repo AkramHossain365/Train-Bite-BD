@@ -11,18 +11,13 @@ let userOrderHistory = [];
 // ================= API HELPERS =================
 // ================= API HELPERS =================
 async function apiPost(endpoint, payload) {
-    const url = `${API_BASE}/${endpoint}`;
-
-    console.log('API Request:', url);
-    console.log('Payload:', payload);
-
-    const res = await fetch(url, {
+    const res = await fetch(`${API_BASE}/${endpoint}`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
     });
+    return res.json();
+}
 
     console.log('API Status:', res.status);
     console.log('API Content-Type:', res.headers.get('content-type'));
